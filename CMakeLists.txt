@@ -1,0 +1,39 @@
+cmake_minimum_required(VERSION 3.13.4)
+project(compiler LANGUAGES CXX)
+find_package(OpenMP)
+
+# Standard Settings
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standard to conform to")
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_CXX_EXTENSIONS NO)
+
+# Build type
+set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build Type")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always")
+
+# Compiler flags
+set(COMPILER_WARNINGS
+    -Wall
+    -Wextra
+    -Wpedantic
+    -Wunused
+    -Wnon-virtual-dtor
+    -Woverloaded-virtual
+    -Wold-style-cast
+    -Wcast-align
+    -Wconversion
+    -Wnull-dereference
+    -Wdouble-promotion)
+
+# Compilation targets
+set(PROJECTS Day1)
+
+foreach(PROJECT ${PROJECTS})
+    add_executable(${PROJECT})
+    set_target_properties(${PROJECT} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+    target_include_directories(${PROJECT} PRIVATE include)
+    target_link_libraries(${PROJECT} PUBLIC OpenMP::OpenMP_CXX)
+    target_compile_options(${PROJECT} PRIVATE ${COMPILER_WARNINGS})
+endforeach()
+
+add_subdirectory(src)

@@ -9,7 +9,7 @@ set(CMAKE_CXX_EXTENSIONS NO)
 
 # Build type
 set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build Type")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always -fno-rtti -fno-exceptions")
 
 # Compiler flags
 set(COMPILER_WARNINGS
@@ -26,7 +26,7 @@ set(COMPILER_WARNINGS
     -Wdouble-promotion)
 
 # Compilation targets
-set(PROJECTS Day1)
+set(PROJECTS Day1 Day2)
 
 foreach(PROJECT ${PROJECTS})
     add_executable(${PROJECT})

@@ -48,10 +48,11 @@ std::vector<std::string> getWords(const std::string &str) {
 
 template <typename A, typename Fn,
           typename B = typename std::invoke_result<Fn, A>::type>
-auto map(const std::vector<A> &a, Fn&& f) {
-    auto res = std::vector<B>{};
-    std::transform(std::begin(a), std::end(a), std::back_inserter(res), f);
-    return res;
+auto map(const std::vector<A> &a, Fn &&f) -> std::vector<B> {
+  auto res = std::vector<B>(a.size());
+  std::transform(std::begin(a), std::end(a), std::begin(res),
+                 std::forward<Fn>(f));
+  return res;
 }
 
 #endif

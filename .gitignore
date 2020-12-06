@@ -4,3 +4,4 @@ build/*
 *.pyc
 .*.sw?
 .sw?
+*.sh

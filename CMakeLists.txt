@@ -26,7 +26,7 @@ set(COMPILER_WARNINGS
     -Wdouble-promotion)
 
 # Compilation targets
-set(PROJECTS Day1 Day2 Day3 Day4 Day5 Day6 Day7 Day8)
+set(PROJECTS Day1 Day2 Day3 Day4 Day5 Day6 Day7 Day8 Day9)
 
 foreach(PROJECT ${PROJECTS})
     add_executable(${PROJECT})

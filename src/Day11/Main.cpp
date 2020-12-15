@@ -9,9 +9,9 @@ long partOne(std::vector<std::string> board) {
         auto occupied = 0;
         for (auto r = -1; r <= 1; r++) {
           for (auto c = -1; c <= 1; c++) {
-            if (static_cast<long>(i) + r < 0 || i + r >= static_cast<long>(board.size()))
+            if (static_cast<long>(i) + r < 0 || i + static_cast<std::size_t>(r) >= board.size())
               continue;
-            if (static_cast<long>(j) + c < 0 || j + c >= static_cast<long>(board[i].size()))
+            if (static_cast<long>(j) + c < 0 || j + static_cast<std::size_t>(c) >= board[i].size())
               continue;
             if (r == 0 && c == 0)
               continue;
@@ -46,9 +46,9 @@ long partTwo(std::vector<std::string> board) {
           long r = i + y;
           long c = j + x;
           while (1) {
-            if (r < 0 || r >= board.size())
+            if (r < 0 || static_cast<std::size_t>(r) >= board.size())
               return 0;
-            if (c < 0 || c >= board[i].size())
+            if (c < 0 || static_cast<std::size_t>(c) >= board[i].size())
               return 0;
             if (board[r][c] == '#')
               return 1;

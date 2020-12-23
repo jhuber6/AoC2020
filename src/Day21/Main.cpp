@@ -2,6 +2,7 @@
 
 #include <map>
 #include <sstream>
+#include <unordered_map>
 
 auto getIngredients(const std::string &str) {
   auto loc = str.find("contains");
@@ -17,7 +18,7 @@ auto getAllergins(const std::string &str) {
 }
 
 auto getOccurences(const std::vector<std::string> &lines) {
-  std::map<std::string, std::vector<std::string>> allerginMap;
+  std::unordered_map<std::string, std::vector<std::string>> allerginMap;
 
   for (const auto &line : lines) {
     auto ingredients = getIngredients(line);

@@ -1,7 +1,8 @@
-#include <iostream>
 #include <algorithm>
 #include <array>
 #include <list>
+
+
 
 // template <typename T>
 // class CircularList {
@@ -68,6 +69,7 @@
 // };
 
 int main() {
+}
 //  std::vector<unsigned long> cups = {6, 8, 5, 9, 7, 4, 2, 1, 3};
   std::list<unsigned long> cups = {3, 8, 9, 1, 2, 5, 4, 6, 7};
 
@@ -82,42 +84,42 @@ int main() {
 //    std::cout << x << " ";
 //  std::cout << "\n";
 
-  std::size_t idx = 0ul;
-  for (int rounds = 0; rounds < 10; ++rounds) {
-    auto cup = cups[idx];
-    auto idx1 = (idx + 1) % cups.size();
-    auto idx2 = (idx + 2) % cups.size();
-    auto idx3 = (idx + 3) % cups.size();
-    std::vector<unsigned long> three = {cups[idx1], cups[idx2], cups[idx3]};
-    std::vector<unsigned long> copy = cups;
-
-    std::cout << "-- move " << rounds << "--\n";
-    std::cout << "cups:";
-    for (const auto &x : cups) {
-      std::cout << " ";
-      if (x == cups[idx])
-        std::cout << "(";
-      std::cout << x;
-      if (x == cups[idx])
-        std::cout << ")";
-    }
-    std::cout << "\n";
-
-    auto dest = cups[idx];
-    auto loc = cups.end();
-    do {
-      dest = (dest - 1 + cups.size()) % cups.size();
-      loc = std::find(std::begin(cups), std::end(cups), dest);
-    } while (std::find(std::begin(three), std::end(three), dest) != std::end(three));
-
-    std::cout << "pick up: ";
-    for (const auto &x : three)
-      std::cout << x << ", ";
-    std::cout << "\n";
-    std::cout << "destination: " << dest << "\n\n";
-
-    idx = (idx + 1) % cups.size();
-  }
+//  std::size_t idx = 0ul;
+//  for (int rounds = 0; rounds < 10; ++rounds) {
+//    auto cup = cups[idx];
+//    auto idx1 = (idx + 1) % cups.size();
+//    auto idx2 = (idx + 2) % cups.size();
+//    auto idx3 = (idx + 3) % cups.size();
+//    std::vector<unsigned long> three = {cups[idx1], cups[idx2], cups[idx3]};
+//    std::vector<unsigned long> copy = cups;
+//
+//    std::cout << "-- move " << rounds << "--\n";
+//    std::cout << "cups:";
+//    for (const auto &x : cups) {
+//      std::cout << " ";
+//      if (x == cups[idx])
+//        std::cout << "(";
+//      std::cout << x;
+//      if (x == cups[idx])
+//        std::cout << ")";
+//    }
+//    std::cout << "\n";
+//
+//    auto dest = cups[idx];
+//    auto loc = cups.end();
+//    do {
+//      dest = (dest - 1 + cups.size()) % cups.size();
+//      loc = std::find(std::begin(cups), std::end(cups), dest);
+//    } while (std::find(std::begin(three), std::end(three), dest) != std::end(three));
+//
+//    std::cout << "pick up: ";
+//    for (const auto &x : three)
+//      std::cout << x << ", ";
+//    std::cout << "\n";
+//    std::cout << "destination: " << dest << "\n\n";
+//
+//    idx = (idx + 1) % cups.size();
+//  }
 
 
 //  std::size_t idx = 0ul;
@@ -180,4 +182,4 @@ int main() {
 //        std::cout << ")";
 //    }
 //    std::cout << "\n";
-}
+// }

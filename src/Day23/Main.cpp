@@ -1,185 +1,95 @@
-#include <algorithm>
 #include <array>
-#include <list>
+#include <unordered_map>
+#include <algorithm>
+#include <initializer_list>
+#include <iostream>
+#include <memory>
 
+template <typename T> class CircularBuffer {
+public:
+  class Node {
+  public:
+    T data;
+    std::shared_ptr<Node> next;
+  };
 
+  CircularBuffer(std::initializer_list<T> list)
+      : head(nullptr), size(list.size()) {
+    if (!list.size())
+      return;
 
-// template <typename T>
-// class CircularList {
-// public:
-//   class iterator {
-//   public:
-//     iterator(typename std::vector<T>::iterator it, 
-//              typename std::vector<T>::iterator begin, 
-//              typename std::vector<T>::iterator end) :
-//       it(it), begin(begin), end(end), size(0ul) {}
-//     iterator operator++() {
-//       if (it + 1 == end)
-//         it = begin;
-//       else
-//         ++it;
-//       size += 1;
-//       return *this;
-//     }
-//     iterator operator++(int) {
-//       iterator tmp = *this;
-//       if (it + 1 == end)
-//         it = begin;
-//       else
-//         ++it;
-//       size += 1;
-//       return tmp;
-//     }
-//     iterator operator+(const std::size_t i) {
-//       std::size_t length = end - begin;
-//       std::size_t start = it - begin;
-//       it = begin + ((start + i) % length);
-//       size += i;
-//       return *this;
-//     }
-//     T& operator*() { return *it; }
-//     bool operator==(const iterator& rhs) { 
-//       return (it != rhs.it || size == 0) && end - begin != 0;
-//     }
-//     bool operator!=(const iterator& rhs) {
-//       return (it != rhs.it || size == 0) && end - begin != 0;
-//     }
-//   private:
-//     typename std::vector<T>::iterator it;
-//     typename std::vector<T>::iterator begin;
-//     typename std::vector<T>::iterator end;
-//     std::size_t size;
-//   };
-// 
-//   template <typename... Args>
-//   CircularList(Args&&... args) : buffer{ std::forward<Args>(args)... } { }
-// 
-//   T& operator[](std::size_t n) { return buffer[wrapIdx(n)]; }
-//   const T& operator[](std::size_t n) const { return buffer[wrapIdx(n)]; }
-// 
-//   auto begin() { return iterator(buffer.begin(), buffer.begin(), buffer.end()); }
-//   auto end() { return iterator(buffer.begin(), buffer.begin(), buffer.end()); }
-// 
-// private:
-//   std::vector<T> buffer;
-//   std::size_t idx;
-//   std::size_t wrapIdx(std::size_t idx) {
-//     return (idx - buffer.size()) % buffer.size();
-//   }
-// };
+    head = std::make_shared<Node>();
+    head->data = *list.begin();
+    std::shared_ptr<Node> last = head;
+    for (auto it = list.begin() + 1; it != list.end(); ++it) {
+      last->next = std::make_shared<Node>();
+      last = last->next;
+      last->data = *it;
+    }
+
+    last->next = head;
+  }
+
+  void append() {
+    auto end = head;
+    for (end = head; end->next != head; end = end->next)
+      ;
+    for (int i = 10; i <= 1000000; ++i, ++size) {
+      end->next = std::make_shared<Node>();
+      end = end->next;
+      end->data = i;
+    }
+    end->next = head;
+  }
+
+  std::shared_ptr<Node> head;
+  std::size_t size;
+};
+
+void runGame(CircularBuffer<long> &cups, int numRounds, long maxVal) {
+  std::unordered_map<long, std::shared_ptr<CircularBuffer<long>::Node>> cache;
+  cache.reserve(maxVal);
+
+  cache[cups.head->data] = cups.head;
+  for (auto loc = cups.head; loc->next != cups.head; loc = loc->next)
+    cache[loc->next->data] = loc->next;
+
+  for (int rounds = 0; rounds < numRounds; ++rounds) {
+    std::array<long, 3> three = {cups.head->next->data,
+                                 cups.head->next->next->data,
+                                 cups.head->next->next->next->data};
+
+    auto dest = cups.head->data;
+    do {
+      if (--dest == 0)
+        dest = maxVal;
+    } while (std::find(std::begin(three), std::end(three), dest) !=
+             std::end(three));
+
+    auto &loc = cache[dest];
+    auto start = cups.head->next;
+    cups.head->next = start->next->next->next;
+    start->next->next->next = loc->next;
+    loc->next = start;
+
+    cups.head = cups.head->next;
+  }
+
+  while (cups.head->data != 1)
+    cups.head = cups.head->next;
+  cups.head = cups.head->next;
+}
 
 int main() {
+  CircularBuffer<long> cups = {6, 8, 5, 9, 7, 4, 2, 1, 3};
+
+  runGame(cups, 100, 9);
+  for (auto node = cups.head; node->next != cups.head; node = node->next)
+    std::cout << node->data;
+  std::cout << "\n";
+
+  cups = {6, 8, 5, 9, 7, 4, 2, 1, 3};
+  cups.append();
+  runGame(cups, 10000000, 1000000);
+  std::cout << cups.head->data * cups.head->next->data << "\n";
 }
-//  std::vector<unsigned long> cups = {6, 8, 5, 9, 7, 4, 2, 1, 3};
-  std::list<unsigned long> cups = {3, 8, 9, 1, 2, 5, 4, 6, 7};
-
-//  for (const auto &x : cups)
-//    std::cout << x << " ";
-//  std::cout << "\n";
-//  std::size_t s = 1;
-//  std::size_t s_n = s + 3;
-//  std::size_t d = 4;
-//  std::rotate(std::begin(cups) + 2, std::begin(cups) + 5, std::begin(cups) + 9);
-//  for (const auto &x : cups)
-//    std::cout << x << " ";
-//  std::cout << "\n";
-
-//  std::size_t idx = 0ul;
-//  for (int rounds = 0; rounds < 10; ++rounds) {
-//    auto cup = cups[idx];
-//    auto idx1 = (idx + 1) % cups.size();
-//    auto idx2 = (idx + 2) % cups.size();
-//    auto idx3 = (idx + 3) % cups.size();
-//    std::vector<unsigned long> three = {cups[idx1], cups[idx2], cups[idx3]};
-//    std::vector<unsigned long> copy = cups;
-//
-//    std::cout << "-- move " << rounds << "--\n";
-//    std::cout << "cups:";
-//    for (const auto &x : cups) {
-//      std::cout << " ";
-//      if (x == cups[idx])
-//        std::cout << "(";
-//      std::cout << x;
-//      if (x == cups[idx])
-//        std::cout << ")";
-//    }
-//    std::cout << "\n";
-//
-//    auto dest = cups[idx];
-//    auto loc = cups.end();
-//    do {
-//      dest = (dest - 1 + cups.size()) % cups.size();
-//      loc = std::find(std::begin(cups), std::end(cups), dest);
-//    } while (std::find(std::begin(three), std::end(three), dest) != std::end(three));
-//
-//    std::cout << "pick up: ";
-//    for (const auto &x : three)
-//      std::cout << x << ", ";
-//    std::cout << "\n";
-//    std::cout << "destination: " << dest << "\n\n";
-//
-//    idx = (idx + 1) % cups.size();
-//  }
-
-
-//  std::size_t idx = 0ul;
-//  for (int i = 0; i < 10; ++i) {
-//    std::cout << "-- move " << i << "--\n";
-//    std::cout << "cups:";
-//    for (const auto &x : cups) {
-//      std::cout << " ";
-//      if (x == cups[idx])
-//        std::cout << "(";
-//      std::cout << x;
-//      if (x == cups[idx])
-//        std::cout << ")";
-//    }
-//    std::cout << "\n";
-//    auto &cup1 = cups[(idx + 1) % N];
-//    auto &cup2 = cups[(idx + 2) % N];
-//    auto &cup3 = cups[(idx + 3) % N];
-//
-//    std::size_t destIdx = 0ul;
-//    for (std::size_t off = 1; off < 9; ++off) {
-//      auto label = ((cups[idx] - off) + N) % N;
-//      for (std::size_t x = 0; x < cups.size(); ++x) {
-//        if (label == cups[x]) {
-//          destIdx = x;
-//          break;
-//        }
-//      }
-//      if (cups[destIdx] != cup1 && cups[destIdx] != cup2 && cups[destIdx] != cup3)
-//        break;
-//    }
-//
-//    auto dest = cups[destIdx];
-//
-//    std::cout << "pick up: " << cup1 << ", " << cup2 << ", " << cup3 << "\n";
-//    std::cout << "destination: " << dest << "\n\n";
-//
-//    for (std::size_t j = destIdx; j != (idx + 1) % N; j = ((j - 1) + N) % N)
-//      std::swap(cups[j], cups[((j - 1) + N) % N]);
-//    for (std::size_t j = destIdx; j != (idx + 2) % N; j = ((j - 1) + N) % N)
-//      std::swap(cups[j], cups[((j - 1) + N) % N]);
-//    for (std::size_t j = destIdx; j != (idx + 3) % N; j = ((j - 1) + N) % N)
-//      std::swap(cups[j], cups[((j - 1) + N) % N]);
-////    cups.erase(std::begin(cups) + 1, std::begin(cups) + 4);
-////    auto it = std::find(std::begin(cups), std::end(cups), dest);
-////    cups.insert(it + 1, cup1);
-////    cups.insert(it + 2, cup2);
-////    cups.insert(it + 3, cup3);
-//    idx = (idx + 1) % N;
-//  }
-//  
-//    std::cout << "-- final --\n";
-//    std::cout << "cups:";
-//    for (const auto &x : cups) {
-//      std::cout << " ";
-//      if (x == cups[idx])
-//        std::cout << "(";
-//      std::cout << x;
-//      if (x == cups[idx])
-//        std::cout << ")";
-//    }
-//    std::cout << "\n";
-// }

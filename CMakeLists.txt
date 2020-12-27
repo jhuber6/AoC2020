@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.13.4)
 project(compiler LANGUAGES CXX)
-find_package(OpenMP)
 
 # Standard Settings
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standard to conform to")
@@ -32,7 +31,6 @@ foreach(PROJECT ${PROJECTS})
     add_executable(${PROJECT})
     set_target_properties(${PROJECT} PROPERTIES RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
     target_include_directories(${PROJECT} PRIVATE include)
-    target_link_libraries(${PROJECT} PUBLIC OpenMP::OpenMP_CXX)
     target_compile_options(${PROJECT} PRIVATE ${COMPILER_WARNINGS})
 endforeach()
 

@@ -6,7 +6,6 @@
 #include <unordered_map>
 
 constexpr std::size_t N = 10;
-
 constexpr std::size_t monsterH = 3;
 constexpr std::size_t monsterW = 20;
 const std::string monster =
@@ -137,8 +136,7 @@ void fitPiece(std::shared_ptr<Piece> &p,
       topPiece = std::make_shared<Piece>(topId, flip(topTile));
     topPiece->bottom = p;
     p->top = topPiece;
-  } else
-    p->top = nullptr;
+  }
   if (leftId != -1) {
     auto &leftPiece = pieceMap[leftId];
     if (!leftPiece)
@@ -146,18 +144,14 @@ void fitPiece(std::shared_ptr<Piece> &p,
           std::make_shared<Piece>(leftId, rotate(rotate(flip(leftTile))));
     leftPiece->right = p;
     p->left = leftPiece;
-  } else
-    p->left = nullptr;
-
+  }
   if (bottomId != -1) {
     auto &bottomPiece = pieceMap[bottomId];
     if (!bottomPiece)
       bottomPiece = std::make_shared<Piece>(bottomId, flip(bottomTile));
     bottomPiece->top = p;
     p->bottom = bottomPiece;
-  } else
-    p->bottom = nullptr;
-
+  }
   if (rightId != -1) {
     auto &rightPiece = pieceMap[rightId];
     if (!rightPiece)
@@ -165,8 +159,7 @@ void fitPiece(std::shared_ptr<Piece> &p,
           std::make_shared<Piece>(rightId, rotate(rotate(flip(rightTile))));
     rightPiece->left = p;
     p->right = rightPiece;
-  } else
-    p->right = nullptr;
+  }
 
   fitPiece(p->top, tiles, edgeMap);
   fitPiece(p->left, tiles, edgeMap);

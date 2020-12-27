@@ -44,7 +44,7 @@ auto parseRules(const std::vector<std::string> &lines) {
   return rules;
 }
 
-// Recursive LL(1) parser
+// Eager Recursive-Descent LL(1) parser with backtracking
 class Parser {
 public:
   Parser(const std::unordered_map<std::size_t, Rule> &rules,
@@ -103,7 +103,8 @@ int main() {
   }
 
   // A direct translation doesn't work because the rule 0: 8 11 isn't LL(1) due
-  // to both 8 and 11 being able to derive ε.
+  // to both 8 and 11 being able to derive ε. The backtracking cannot know hou
+  // much to recurse in a single direction.
   //
   // A workaround is to simply test a few common expansions of 8 instead.
   rules[0] = {{42ul, 11ul},

@@ -6,7 +6,9 @@ int main() {
   auto content = getFileContents("../input/Day2/input.txt");
   std::replace(content.begin(), content.end(), '-', ' '); 
   auto lines = getLines(content);
-  auto words = map(lines, getWords);
+  auto words = std::vector<std::vector<std::string>>(lines.size());
+  std::transform(std::begin(lines), std::end(lines), std::begin(words),
+                 getWords);
 
   auto &&p1 = [](int lo, int hi, char key, std::string &pwd) {
     auto c = std::count(pwd.begin(), pwd.end(), key);

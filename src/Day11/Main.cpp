@@ -9,9 +9,11 @@ long partOne(std::vector<std::string> board) {
         auto occupied = 0;
         for (auto r = -1; r <= 1; r++) {
           for (auto c = -1; c <= 1; c++) {
-            if (static_cast<long>(i) + r < 0 || i + static_cast<std::size_t>(r) >= board.size())
+            if (static_cast<long>(i) + r < 0 ||
+                i + static_cast<std::size_t>(r) >= board.size())
               continue;
-            if (static_cast<long>(j) + c < 0 || j + static_cast<std::size_t>(c) >= board[i].size())
+            if (static_cast<long>(j) + c < 0 ||
+                j + static_cast<std::size_t>(c) >= board[i].size())
               continue;
             if (r == 0 && c == 0)
               continue;

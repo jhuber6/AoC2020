@@ -30,8 +30,8 @@ int main() {
 
   std::transform(moves.begin(), moves.end(), std::back_inserter(trees), move);
   int s1 = trees[1];
-  int s2 =
-      std::accumulate(trees.begin(), trees.end(), 1, std::multiplies<int>());
+  int s2 = std::accumulate(trees.begin(), trees.end(), 1,
+                           [](auto x, auto y) { return x * y; });
 
   std::cout << s1 << "\n";
   std::cout << s2 << "\n";

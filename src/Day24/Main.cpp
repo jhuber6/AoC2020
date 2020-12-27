@@ -49,6 +49,7 @@ int main() {
   auto s1 = std::count_if(std::begin(grid), std::end(grid),
                           [](auto x) { return x.second; });
 
+  // Buffer out edges in the map
   std::map<std::tuple<int, int, int>, bool> update;
   for (const auto &[p, c] : grid) {
     const auto [x, y, z] = p;
@@ -78,8 +79,6 @@ int main() {
         update[p] = false;
       else if (!c && count == 2)
         update[p] = true;
-      else
-        update[p] = c;
     }
     grid = update;
   }

@@ -1,3 +1,3 @@
 foreach(PROJECT ${PROJECTS})
-    add_subdirectory(${PROJECT})
+    target_sources(${PROJECT} PRIVATE ${PROJECT}/Main.cpp)
 endforeach()

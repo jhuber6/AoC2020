@@ -13,8 +13,7 @@ public:
     std::shared_ptr<Node> next;
   };
 
-  CircularBuffer(std::initializer_list<T> list)
-      : head(nullptr), size(list.size()) {
+  CircularBuffer(std::initializer_list<T> list) : head(nullptr) {
     if (!list.size())
       return;
 
@@ -30,11 +29,11 @@ public:
     last->next = head;
   }
 
-  void append() {
+  void append(T min, T max) {
     auto end = head;
     for (end = head; end->next != head; end = end->next)
       ;
-    for (int i = 10; i <= 1000000; ++i, ++size) {
+    for (T i = min; i <= max; ++i) {
       end->next = std::make_shared<Node>();
       end = end->next;
       end->data = i;
@@ -43,7 +42,6 @@ public:
   }
 
   std::shared_ptr<Node> head;
-  std::size_t size;
 };
 
 void runGame(CircularBuffer<long> &cups, int numRounds, long maxVal) {
@@ -84,12 +82,15 @@ int main() {
   CircularBuffer<long> cups = {6, 8, 5, 9, 7, 4, 2, 1, 3};
 
   runGame(cups, 100, 9);
+  auto s1 = 0l;
   for (auto node = cups.head; node->next != cups.head; node = node->next)
-    std::cout << node->data;
-  std::cout << "\n";
+    s1 = s1 * 10 + node->data;
 
   cups = {6, 8, 5, 9, 7, 4, 2, 1, 3};
-  cups.append();
+  cups.append(10, 1000000);
   runGame(cups, 10000000, 1000000);
-  std::cout << cups.head->data * cups.head->next->data << "\n";
+  auto s2 = cups.head->data * cups.head->next->data;
+
+  std::cout << s1 << "\n";
+  std::cout << s2 << "\n";
 }

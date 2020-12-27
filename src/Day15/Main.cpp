@@ -1,6 +1,5 @@
 #include <array>
 #include <iostream>
-#include <unordered_map>
 #include <vector>
 
 long solve(const std::vector<long> &numbers, const std::size_t iterations) {

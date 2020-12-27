@@ -1,7 +1,6 @@
 #ifndef COMMON_H
 #define COMMON_H
 
-#include <type_traits>
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -44,15 +43,6 @@ std::vector<std::string> getLines(const std::string &str) {
 
 std::vector<std::string> getWords(const std::string &str) {
   return split(str, ' ');
-}
-
-template <typename A, typename Fn,
-          typename B = typename std::invoke_result<Fn, A>::type>
-auto map(const std::vector<A> &a, Fn &&f) -> std::vector<B> {
-  auto res = std::vector<B>(a.size());
-  std::transform(std::begin(a), std::end(a), std::begin(res),
-                 std::forward<Fn>(f));
-  return res;
 }
 
 #endif

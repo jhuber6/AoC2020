@@ -34,7 +34,9 @@ int partTwo(std::vector<int> lines) {
 
 int main() {
   auto lines = getLines(getFileContents("../input/Day1/input.txt"));
-  auto numbers = map(lines, [](auto x) { return std::stoi(x); });
+  auto numbers = std::vector<int>(lines.size());
+  std::transform(std::begin(lines), std::end(lines), std::begin(numbers),
+                 [](auto x) { return std::stoi(x); });
 
   std::cout << partOne(numbers) << "\n";
   std::cout << partTwo(numbers) << "\n";
